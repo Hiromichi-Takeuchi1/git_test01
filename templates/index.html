@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block title %}
+在庫一覧
+{% endblock %}
+
+{% block content %}
+
+<h2>在庫一覧</h2>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<p>
+    <a href="{{ url_for('transaction') }}">
+        入荷・出庫入力へ
+    </a>
+</p>
+
+<p>
+    <a href="{{ url_for('add_product_master') }}">
+        商品を追加する
+    </a>
+</p>
+
+<table>
+    <tr>
+        <th>商品名</th>
+        <th>現在在庫</th>
+        <th>適正在庫</th>
+        <th>差異</th>
+    </tr>
+
+    {% for product in products %}
+    <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.stock }}</td>
+        <td>{{ product.proper_stock }}</td>
+        <td{% if product.difference < 0 %} class="difference-negative"{% endif %}>
+            {{ product.difference }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

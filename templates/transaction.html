@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}
+入荷・出庫入力
+{% endblock %}
+
+{% block content %}
+
+<h2>入荷・出庫入力</h2>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<form method="POST">
+
+    <p>
+        商品
+        <select name="product_id">
+
+            {% for product in products %}
+
+            <option value="{{ product.id }}">
+                {{ product.name }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        処理
+        <select name="transaction_type">
+            <option value="in">入荷</option>
+            <option value="out">出庫</option>
+        </select>
+    </p>
+
+    <p>
+        数量
+        <input type="number" name="quantity" min="1">
+    </p>
+
+    <button type="submit">
+        登録
+    </button>
+
+</form>
+
+<p>
+    <a href="{{ url_for('home') }}">
+        在庫一覧へ戻る
+    </a>
+</p>
+
+{% endblock %}

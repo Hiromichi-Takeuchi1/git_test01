@@ -1,0 +1,41 @@
+body {
+    font-family: sans-serif;
+    background-color: #fffbe6;
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
+form {
+    margin-bottom: 30px;
+}
+
+input {
+    padding: 8px;
+    margin-left: 10px;
+}
+
+button {
+    padding: 8px 16px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.difference-negative {
+    background-color: #f8d7da;
+    color: #842029;
+}

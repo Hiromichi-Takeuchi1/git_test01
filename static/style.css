@@ -35,6 +35,11 @@ td {
     text-align: left;
 }
 
+.difference-positive {
+    background-color: #fff3cd;
+    color: #664d03;
+}
+
 .difference-negative {
     background-color: #f8d7da;
     color: #842029;

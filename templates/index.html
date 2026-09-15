@@ -42,7 +42,7 @@
         <td>{{ product.name }}</td>
         <td>{{ product.stock }}</td>
         <td>{{ product.proper_stock }}</td>
-        <td{% if product.difference < 0 %} class="difference-negative"{% endif %}>
+        <td{% if product.difference > 0 %} class="difference-positive"{% elif product.difference < 0 %} class="difference-negative"{% endif %}>
             {{ product.difference }}
         </td>
     </tr>

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import sqlite3
+from datetime import datetime
 
 def get_db_connection():
     conn = sqlite3.connect("inventory.db")
@@ -64,6 +65,13 @@ def transaction():
                     "UPDATE products SET stock = stock + ? WHERE id = ?",
                     (quantity, product_id)
                 )
+                conn.execute(
+                    """
+                    INSERT INTO transactions (product_name, transaction_type, quantity, created_at)
+                    VALUES (?, ?, ?, ?)
+                    """,
+                    (product["name"], "入荷", quantity, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                )
                 conn.commit()
                 flash("入荷を登録しました")
 
@@ -76,6 +84,13 @@ def transaction():
                 conn.execute(
                     "UPDATE products SET stock = stock - ? WHERE id = ?",
                     (quantity, product_id)
+                )
+                conn.execute(
+                    """
+                    INSERT INTO transactions (product_name, transaction_type, quantity, created_at)
+                    VALUES (?, ?, ?, ?)
+                    """,
+                    (product["name"], "出庫", quantity, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
                 )
                 conn.commit()
                 flash("出庫を登録しました")
@@ -93,6 +108,20 @@ def transaction():
     return render_template(
         "transaction.html",
         products=products
+    )
+
+@app.route("/history")
+def history():
+
+    conn = get_db_connection()
+    transactions = conn.execute(
+        "SELECT * FROM transactions ORDER BY id DESC"
+    ).fetchall()
+    conn.close()
+
+    return render_template(
+        "history.html",
+        transactions=transactions
     )
 
 @app.route("/product/add", methods=["GET", "POST"])

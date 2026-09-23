@@ -12,6 +12,16 @@ CREATE TABLE IF NOT EXISTS products (
 """)
 
 conn.execute("""
+CREATE TABLE IF NOT EXISTS transactions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_name TEXT NOT NULL,
+    transaction_type TEXT NOT NULL,
+    quantity INTEGER NOT NULL,
+    created_at TEXT NOT NULL
+)
+""")
+
+conn.execute("""
 INSERT INTO products (name, stock, proper_stock)
 VALUES ('コーヒー豆', 10, 15)
 """)

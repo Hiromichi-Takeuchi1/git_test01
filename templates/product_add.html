@@ -37,7 +37,7 @@
 <h2>登録済み商品</h2>
 
 {% for product in products %}
-<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 10px;">
+<div style="display: grid; grid-template-columns: 180px 140px auto; align-items: center; gap: 16px; margin-bottom: 10px; white-space: nowrap;">
     <span>{{ product.name }}</span>
     <span>適正在庫 {{ product.proper_stock }}</span>
     <form method="POST" action="{{ url_for('delete_product', product_id=product.id) }}" style="margin: 0;" onsubmit="return confirm('この商品を削除しますか？');">

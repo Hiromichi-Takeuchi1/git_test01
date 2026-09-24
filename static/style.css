@@ -259,6 +259,155 @@ a {
     font-weight: 700;
 }
 
+.transaction-page {
+    width: min(100%, 560px);
+    margin: 0 auto;
+    padding: 28px 16px 44px;
+}
+
+.transaction-intro {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.transaction-intro__icon {
+    display: grid;
+    flex: 0 0 52px;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    color: #ffffff;
+    background: linear-gradient(145deg, #65c9ee, #237dcc);
+    font-size: 28px;
+}
+
+.transaction-intro h1 {
+    margin: 0 0 5px;
+    color: #172d55;
+    font-size: 22px;
+}
+
+.transaction-intro p {
+    margin: 0;
+    color: #718096;
+    font-size: 13px;
+}
+
+.transaction-flash {
+    margin: -5px 0 16px;
+    padding: 11px 14px;
+    border: 1px solid #cfeaf7;
+    border-radius: 10px;
+    color: #155e9c;
+    background: #f1fbfe;
+    font-size: 13px;
+}
+
+.transaction-flash p {
+    margin: 0;
+}
+
+.transaction-form {
+    padding: 22px 16px 18px;
+    border: 1px solid #e0edf4;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 8px 22px rgba(48, 91, 130, 0.1);
+}
+
+.transaction-field {
+    margin-bottom: 18px;
+}
+
+.transaction-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #263d61;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.transaction-field select,
+.transaction-field input {
+    width: 100%;
+    height: 50px;
+    padding: 0 14px;
+    border: 1px solid #c9dce8;
+    border-radius: 11px;
+    outline: none;
+    color: #38516f;
+    background: #ffffff;
+    font: inherit;
+    font-size: 14px;
+}
+
+.transaction-field select:focus,
+.transaction-field input:focus {
+    border-color: #398fc9;
+    box-shadow: 0 0 0 3px rgba(57, 143, 201, 0.13);
+}
+
+.transaction-field select:invalid,
+.transaction-field input::placeholder {
+    color: #91a4b5;
+}
+
+.select-wrap {
+    position: relative;
+}
+
+.select-wrap::after {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #4c82a8;
+    border-bottom: 2px solid #4c82a8;
+    content: "";
+    pointer-events: none;
+    transform: translateY(-65%) rotate(45deg);
+}
+
+.transaction-field select {
+    appearance: none;
+    padding-right: 42px;
+}
+
+.transaction-submit,
+.transaction-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 50px;
+    border-radius: 11px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.transaction-submit {
+    margin-top: 5px;
+    border: 0;
+    color: #ffffff;
+    background: linear-gradient(135deg, #53b9e7, #2378c6);
+    box-shadow: 0 6px 14px rgba(35, 120, 198, 0.22);
+    cursor: pointer;
+}
+
+.transaction-back {
+    min-height: 46px;
+    margin-top: 12px;
+    border: 1px solid #398fc9;
+    color: #2477b5;
+    background: #ffffff;
+    font-size: 14px;
+}
+
 @media (min-width: 768px) {
     .inventory-home {
         padding: 42px 24px 56px;
@@ -283,5 +432,13 @@ a {
 
     .inventory-table th {
         font-size: 12px;
+    }
+
+    .transaction-page {
+        padding: 42px 24px 56px;
+    }
+
+    .transaction-form {
+        padding: 28px 26px 22px;
     }
 }

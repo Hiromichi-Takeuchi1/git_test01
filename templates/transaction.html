@@ -1,61 +1,74 @@
+<!DOCTYPE html>
 {% extends "base.html" %}
 
 {% block title %}
 入荷・出庫入力
 {% endblock %}
 
+{% block site_header %}
+<header class="top-header">
+    <a class="top-header__brand" href="{{ url_for('home') }}">TOP</a>
+    <button class="menu-button" type="button" aria-label="メニュー">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</header>
+{% endblock %}
+
 {% block content %}
 
-<h2>入荷・出庫入力</h2>
+<div class="transaction-page">
+    <section class="transaction-intro" aria-labelledby="transaction-heading">
+        <div class="transaction-intro__icon" aria-hidden="true">▣</div>
+        <div>
+            <h1 id="transaction-heading">入庫・出庫</h1>
+            <p>商品の入庫・出庫を登録します</p>
+        </div>
+    </section>
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="transaction-flash" role="status">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
-<form method="POST">
+    <form class="transaction-form" method="POST">
+        <div class="transaction-field">
+            <label for="product_id">商品名</label>
+            <div class="select-wrap">
+                <select id="product_id" name="product_id" required>
+                    <option value="" selected disabled>商品を選択</option>
+                    {% for product in products %}
+                    <option value="{{ product.id }}">{{ product.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
-    <p>
-        商品
-        <select name="product_id">
+        <div class="transaction-field">
+            <label for="transaction_type">処理</label>
+            <div class="select-wrap">
+                <select id="transaction_type" name="transaction_type" required>
+                    <option value="" selected disabled>処理を選択（入庫・出庫）</option>
+                    <option value="in">入庫</option>
+                    <option value="out">出庫</option>
+                </select>
+            </div>
+        </div>
 
-            {% for product in products %}
+        <div class="transaction-field">
+            <label for="quantity">数量</label>
+            <input id="quantity" type="number" name="quantity" min="1" step="1" placeholder="数量を入力" required>
+        </div>
 
-            <option value="{{ product.id }}">
-                {{ product.name }}
-            </option>
-
-            {% endfor %}
-
-        </select>
-    </p>
-
-    <p>
-        処理
-        <select name="transaction_type">
-            <option value="in">入荷</option>
-            <option value="out">出庫</option>
-        </select>
-    </p>
-
-    <p>
-        数量
-        <input type="number" name="quantity" min="1">
-    </p>
-
-    <button type="submit">
-        登録
-    </button>
-
-</form>
-
-<p>
-    <a href="{{ url_for('home') }}">
-        在庫一覧へ戻る
-    </a>
-</p>
+        <button class="transaction-submit" type="submit">登録</button>
+        <a class="transaction-back" href="{{ url_for('home') }}">TOPへ戻る</a>
+    </form>
+</div>
 
 {% endblock %}

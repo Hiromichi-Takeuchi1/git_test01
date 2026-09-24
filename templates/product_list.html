@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block title %}商品管理{% endblock %}
+
+{% block site_header %}
+<header class="top-header">
+    <a class="top-header__brand" href="{{ url_for('home') }}">TOP</a>
+    <button class="menu-button" type="button" aria-label="メニュー">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="product-page product-list-page">
+    <section class="product-heading">
+        <div class="product-heading__icon" aria-hidden="true">▣</div>
+        <div>
+            <h1>商品管理</h1>
+            <p>商品の追加・編集・削除ができます。</p>
+        </div>
+    </section>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="product-flash" role="status">
+                {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <a class="product-add-button" href="{{ url_for('add_product_master') }}">＋ 商品を追加する</a>
+
+    <section class="product-table-card" aria-labelledby="product-table-heading">
+        <h2 id="product-table-heading">商品一覧</h2>
+        <div class="product-table-wrap">
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">商品名</th>
+                        <th scope="col">単位</th>
+                        <th scope="col">適正在庫数</th>
+                        <th scope="col">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ "%02d"|format(product.id) }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.unit if product.unit is defined else "未設定" }}</td>
+                        <td>{{ product.proper_stock }}</td>
+                        <td class="product-actions">
+                            <a class="product-edit-button" href="{{ url_for('edit_product', product_id=product.id) }}">変更</a>
+                            <form method="POST" action="{{ url_for('delete_product', product_id=product.id) }}" onsubmit="return confirm('この商品を削除しますか？');">
+                                <button class="product-delete-button" type="submit">削除</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td class="product-table__empty" colspan="5">商品が登録されていません</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <a class="product-page__top" href="{{ url_for('home') }}">＜ TOPへ戻る</a>
+</div>
+{% endblock %}

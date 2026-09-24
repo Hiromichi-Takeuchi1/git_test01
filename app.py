@@ -5,6 +5,12 @@ from datetime import datetime
 def get_db_connection():
     conn = sqlite3.connect("inventory.db")
     conn.row_factory = sqlite3.Row
+    columns = {
+        row[1] for row in conn.execute("PRAGMA table_info(transactions)")
+    }
+    if columns and "product_id" not in columns:
+        conn.execute("ALTER TABLE transactions ADD COLUMN product_id INTEGER")
+        conn.commit()
     return conn
 
 app = Flask(__name__)
@@ -67,10 +73,10 @@ def transaction():
                 )
                 conn.execute(
                     """
-                    INSERT INTO transactions (product_name, transaction_type, quantity, created_at)
-                    VALUES (?, ?, ?, ?)
+                    INSERT INTO transactions (product_id, product_name, transaction_type, quantity, created_at)
+                    VALUES (?, ?, ?, ?, ?)
                     """,
-                    (product["name"], "入荷", quantity, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                    (product_id, product["name"], "入荷", quantity, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
                 )
                 conn.commit()
                 flash("入荷を登録しました")
@@ -87,10 +93,10 @@ def transaction():
                 )
                 conn.execute(
                     """
-                    INSERT INTO transactions (product_name, transaction_type, quantity, created_at)
-                    VALUES (?, ?, ?, ?)
+                    INSERT INTO transactions (product_id, product_name, transaction_type, quantity, created_at)
+                    VALUES (?, ?, ?, ?, ?)
                     """,
-                    (product["name"], "出庫", quantity, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                    (product_id, product["name"], "出庫", quantity, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
                 )
                 conn.commit()
                 flash("出庫を登録しました")
@@ -115,7 +121,12 @@ def history():
 
     conn = get_db_connection()
     transactions = conn.execute(
-        "SELECT * FROM transactions ORDER BY id DESC"
+        """
+        SELECT transactions.*, products.name AS current_product_name
+        FROM transactions
+        LEFT JOIN products ON products.id = transactions.product_id
+        ORDER BY transactions.id DESC
+        """
     ).fetchall()
     conn.close()
 
@@ -123,6 +134,167 @@ def history():
         "history.html",
         transactions=transactions
     )
+
+def transaction_effect(transaction_type, quantity):
+    if transaction_type in ("in", "入荷"):
+        return quantity
+    return -quantity
+
+def transaction_label(transaction_type):
+    if transaction_type in ("in", "入荷"):
+        return "入庫"
+    return "出庫"
+
+def transaction_form_value(transaction_type):
+    if transaction_type in ("in", "入荷"):
+        return "in"
+    return "out"
+
+def get_transaction_product(conn, transaction):
+    if transaction["product_id"] is not None:
+        return conn.execute(
+            "SELECT * FROM products WHERE id = ?",
+            (transaction["product_id"],)
+        ).fetchone()
+    return conn.execute(
+        "SELECT * FROM products WHERE name = ? ORDER BY id LIMIT 1",
+        (transaction["product_name"],)
+    ).fetchone()
+
+@app.route("/history/edit/<int:transaction_id>", methods=["GET", "POST"])
+def edit_transaction(transaction_id):
+
+    conn = get_db_connection()
+    transaction_record = conn.execute(
+        "SELECT * FROM transactions WHERE id = ?",
+        (transaction_id,)
+    ).fetchone()
+
+    if transaction_record is None:
+        conn.close()
+        flash("履歴が見つかりません")
+        return redirect(url_for("history"))
+
+    if request.method == "POST":
+        product_id = int(request.form["product_id"])
+        transaction_type = request.form["transaction_type"]
+        quantity = int(request.form["quantity"])
+        created_at = request.form["created_at"]
+
+        if quantity <= 0:
+            conn.close()
+            flash("数量は1以上を入力してください")
+            return redirect(url_for("edit_transaction", transaction_id=transaction_id))
+
+        old_product = get_transaction_product(conn, transaction_record)
+        new_product = conn.execute(
+            "SELECT * FROM products WHERE id = ?",
+            (product_id,)
+        ).fetchone()
+
+        if old_product is None or new_product is None:
+            conn.close()
+            flash("商品が見つかりません")
+            return redirect(url_for("edit_transaction", transaction_id=transaction_id))
+
+        try:
+            if created_at:
+                created_at = datetime.fromisoformat(created_at).strftime("%Y-%m-%d %H:%M:%S")
+            else:
+                created_at = transaction_record["created_at"]
+        except ValueError:
+            conn.close()
+            flash("日時の形式が正しくありません")
+            return redirect(url_for("edit_transaction", transaction_id=transaction_id))
+
+        old_effect = transaction_effect(transaction_record["transaction_type"], transaction_record["quantity"])
+        new_effect = transaction_effect(transaction_type, quantity)
+        old_stock_after_reversal = old_product["stock"] - old_effect
+        new_stock_after_update = old_stock_after_reversal + new_effect if old_product["id"] == new_product["id"] else new_product["stock"] + new_effect
+
+        if old_product["id"] != new_product["id"] and new_stock_after_update < 0:
+            conn.close()
+            flash("在庫数が不足しているため更新できません")
+            return redirect(url_for("edit_transaction", transaction_id=transaction_id))
+        if old_product["id"] == new_product["id"] and new_stock_after_update < 0:
+            conn.close()
+            flash("在庫数が不足しているため更新できません")
+            return redirect(url_for("edit_transaction", transaction_id=transaction_id))
+
+        conn.execute(
+            "UPDATE products SET stock = stock - ? WHERE id = ?",
+            (old_effect, old_product["id"])
+        )
+        if old_product["id"] == new_product["id"]:
+            conn.execute(
+                "UPDATE products SET stock = stock + ? WHERE id = ?",
+                (new_effect, new_product["id"])
+            )
+        else:
+            conn.execute(
+                "UPDATE products SET stock = stock + ? WHERE id = ?",
+                (new_effect, new_product["id"])
+            )
+
+        conn.execute(
+            """
+            UPDATE transactions
+            SET product_id = ?, product_name = ?, transaction_type = ?, quantity = ?, created_at = ?
+            WHERE id = ?
+            """,
+            (new_product["id"], new_product["name"], "入荷" if transaction_type == "in" else "出庫", quantity, created_at, transaction_id)
+        )
+        conn.commit()
+        conn.close()
+        flash("履歴を更新しました")
+        return redirect(url_for("history"))
+
+    products = conn.execute("SELECT * FROM products ORDER BY id").fetchall()
+    product = get_transaction_product(conn, transaction_record)
+    conn.close()
+    return render_template(
+        "history_edit.html",
+        transaction=transaction_record,
+        products=products,
+        product=product,
+        transaction_label=transaction_label,
+        transaction_form_value=transaction_form_value
+    )
+
+@app.route("/history/delete/<int:transaction_id>", methods=["POST"])
+def delete_transaction(transaction_id):
+
+    conn = get_db_connection()
+    transaction_record = conn.execute(
+        "SELECT * FROM transactions WHERE id = ?",
+        (transaction_id,)
+    ).fetchone()
+    if transaction_record is None:
+        conn.close()
+        flash("履歴が見つかりません")
+        return redirect(url_for("history"))
+
+    product = get_transaction_product(conn, transaction_record)
+    if product is None:
+        conn.close()
+        flash("商品が見つからないため履歴を削除できません")
+        return redirect(url_for("history"))
+
+    effect = transaction_effect(transaction_record["transaction_type"], transaction_record["quantity"])
+    if product["stock"] - effect < 0:
+        conn.close()
+        flash("在庫数が不足しているため削除できません")
+        return redirect(url_for("history"))
+
+    conn.execute(
+        "UPDATE products SET stock = stock - ? WHERE id = ?",
+        (effect, product["id"])
+    )
+    conn.execute("DELETE FROM transactions WHERE id = ?", (transaction_id,))
+    conn.commit()
+    conn.close()
+    flash("履歴を削除しました")
+    return redirect(url_for("history"))
 
 @app.route("/product/add", methods=["GET", "POST"])
 def add_product_master():
@@ -149,7 +321,7 @@ def add_product_master():
         conn.close()
 
         flash("商品を追加しました")
-        return redirect(url_for("home"))
+        return redirect(url_for("product_list"))
 
     conn = get_db_connection()
     products = conn.execute(
@@ -160,6 +332,60 @@ def add_product_master():
     return render_template(
         "product_add.html",
         products=products
+    )
+
+@app.route("/products")
+def product_list():
+
+    conn = get_db_connection()
+    products = conn.execute(
+        "SELECT * FROM products ORDER BY id"
+    ).fetchall()
+    conn.close()
+
+    return render_template(
+        "product_list.html",
+        products=products
+    )
+
+@app.route("/product/edit/<int:product_id>", methods=["GET", "POST"])
+def edit_product(product_id):
+
+    conn = get_db_connection()
+    product = conn.execute(
+        "SELECT * FROM products WHERE id = ?",
+        (product_id,)
+    ).fetchone()
+
+    if product is None:
+        conn.close()
+        flash("商品が見つかりません")
+        return redirect(url_for("product_list"))
+
+    if request.method == "POST":
+        name = request.form["name"]
+        proper_stock = request.form["proper_stock"]
+
+        if name == "" or proper_stock == "":
+            conn.close()
+            flash("商品名と適正在庫を入力してください")
+            return redirect(url_for("edit_product", product_id=product_id))
+
+        proper_stock = int(proper_stock)
+        conn.execute(
+            "UPDATE products SET name = ?, proper_stock = ? WHERE id = ?",
+            (name, proper_stock, product_id)
+        )
+        conn.commit()
+        conn.close()
+
+        flash("商品を更新しました")
+        return redirect(url_for("product_list"))
+
+    conn.close()
+    return render_template(
+        "product_edit.html",
+        product=product
     )
 
 @app.route("/product/delete/<int:product_id>", methods=["POST"])
@@ -174,4 +400,4 @@ def delete_product(product_id):
     conn.close()
 
     flash("商品を削除しました")
-    return redirect(url_for("add_product_master"))
+    return redirect(url_for("product_list"))

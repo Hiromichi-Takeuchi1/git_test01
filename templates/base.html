@@ -11,9 +11,11 @@
 
 <body>
 
-    <header>
-        <h1>在庫管理アプリ</h1>
-    </header>
+    {% block site_header %}
+        <header>
+            <h1>在庫管理アプリ</h1>
+        </header>
+    {% endblock %}
 
     <main>
         {% block content %}

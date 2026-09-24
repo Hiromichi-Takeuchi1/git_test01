@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
 
-{% block title %}商品登録{% endblock %}
+{% block title %}商品編集{% endblock %}
 
 {% block site_header %}
 <header class="top-header">
@@ -15,14 +15,13 @@
 {% endblock %}
 
 {% block content %}
-
 <div class="product-page">
     <a class="product-page__back" href="{{ url_for('product_list') }}">＜ 商品管理に戻る</a>
     <section class="product-heading">
         <div class="product-heading__icon" aria-hidden="true">▣</div>
         <div>
-            <h1>商品を追加する</h1>
-            <p>新しい商品を登録します。</p>
+            <h1>商品を編集する</h1>
+            <p>一覧で「変更」を押すと、この画面に既存の内容が表示されます。<br>修正後に再登録します。</p>
         </div>
     </section>
 
@@ -37,23 +36,22 @@
     <form class="product-form" method="POST">
         <div class="product-field">
             <label for="product-id">ID</label>
-            <input id="product-id" type="text" placeholder="例）03" readonly>
+            <input id="product-id" type="text" value="{{ '%02d'|format(product.id) }}" readonly>
         </div>
         <div class="product-field">
             <label for="product-name">商品名</label>
-            <input id="product-name" type="text" name="name" placeholder="例）コーヒー" required>
+            <input id="product-name" type="text" name="name" value="{{ product.name }}" required>
         </div>
         <div class="product-field">
             <label for="product-unit">単位</label>
-            <input id="product-unit" type="text" name="unit" placeholder="例）袋">
+            <input id="product-unit" type="text" name="unit" value="{{ product.unit if product.unit is defined else '' }}" placeholder="例）袋">
         </div>
         <div class="product-field">
             <label for="proper-stock">適正在庫数</label>
-            <input id="proper-stock" type="number" name="proper_stock" min="0" placeholder="例）10" required>
+            <input id="proper-stock" type="number" name="proper_stock" min="0" value="{{ product.proper_stock }}" required>
         </div>
-        <button class="product-submit" type="submit">登録</button>
-        <a class="product-cancel" href="{{ url_for('home') }}">＜ TOPへ戻る</a>
+        <button class="product-submit" type="submit">更新する</button>
+        <a class="product-cancel" href="{{ url_for('product_list') }}">キャンセル</a>
     </form>
 </div>
-
 {% endblock %}

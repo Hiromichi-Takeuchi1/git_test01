@@ -149,7 +149,7 @@ def add_product_master():
         conn.close()
 
         flash("商品を追加しました")
-        return redirect(url_for("home"))
+        return redirect(url_for("product_list"))
 
     conn = get_db_connection()
     products = conn.execute(
@@ -160,6 +160,60 @@ def add_product_master():
     return render_template(
         "product_add.html",
         products=products
+    )
+
+@app.route("/products")
+def product_list():
+
+    conn = get_db_connection()
+    products = conn.execute(
+        "SELECT * FROM products ORDER BY id"
+    ).fetchall()
+    conn.close()
+
+    return render_template(
+        "product_list.html",
+        products=products
+    )
+
+@app.route("/product/edit/<int:product_id>", methods=["GET", "POST"])
+def edit_product(product_id):
+
+    conn = get_db_connection()
+    product = conn.execute(
+        "SELECT * FROM products WHERE id = ?",
+        (product_id,)
+    ).fetchone()
+
+    if product is None:
+        conn.close()
+        flash("商品が見つかりません")
+        return redirect(url_for("product_list"))
+
+    if request.method == "POST":
+        name = request.form["name"]
+        proper_stock = request.form["proper_stock"]
+
+        if name == "" or proper_stock == "":
+            conn.close()
+            flash("商品名と適正在庫を入力してください")
+            return redirect(url_for("edit_product", product_id=product_id))
+
+        proper_stock = int(proper_stock)
+        conn.execute(
+            "UPDATE products SET name = ?, proper_stock = ? WHERE id = ?",
+            (name, proper_stock, product_id)
+        )
+        conn.commit()
+        conn.close()
+
+        flash("商品を更新しました")
+        return redirect(url_for("product_list"))
+
+    conn.close()
+    return render_template(
+        "product_edit.html",
+        product=product
     )
 
 @app.route("/product/delete/<int:product_id>", methods=["POST"])
@@ -174,4 +228,4 @@ def delete_product(product_id):
     conn.close()
 
     flash("商品を削除しました")
-    return redirect(url_for("add_product_master"))
+    return redirect(url_for("product_list"))

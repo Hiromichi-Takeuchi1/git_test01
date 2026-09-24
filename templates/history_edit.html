@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block title %}履歴編集{% endblock %}
+
+{% block site_header %}
+<header class="top-header">
+    <a class="top-header__brand" href="{{ url_for('home') }}">TOP</a>
+    <button class="menu-button" type="button" aria-label="メニュー">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="history-page history-edit-page">
+    <a class="history-page__back" href="{{ url_for('history') }}">＜ 入出庫履歴に戻る</a>
+    <section class="history-heading">
+        <div class="history-heading__icon" aria-hidden="true">▤</div>
+        <div>
+            <h1>履歴編集</h1>
+            <p>選択した入出庫履歴の内容を修正できます。</p>
+        </div>
+    </section>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="history-flash" role="status">
+                {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form class="history-form" method="POST">
+        <div class="history-field">
+            <label for="history-id">ID</label>
+            <input id="history-id" type="text" value="H-{{ '%05d'|format(transaction.id) }}" readonly>
+        </div>
+        <div class="history-field">
+            <label for="created-at">日時</label>
+            <input id="created-at" type="datetime-local" name="created_at" value="{{ transaction.created_at|replace(' ', 'T') }}" required>
+        </div>
+        <div class="history-field">
+            <label for="product-id">商品</label>
+            <select id="product-id" name="product_id" required>
+                {% for item in products %}
+                    {% if product and item.id == product.id %}
+                    <option value="{{ item.id }}" selected>{{ item.name }}</option>
+                    {% else %}
+                    <option value="{{ item.id }}">{{ item.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="history-field">
+            <label for="transaction-type">入庫・出庫</label>
+            <select id="transaction-type" name="transaction_type" required>
+                {% if transaction_form_value(transaction.transaction_type) == 'in' %}
+                <option value="in" selected>入庫</option>
+                <option value="out">出庫</option>
+                {% else %}
+                <option value="in">入庫</option>
+                <option value="out" selected>出庫</option>
+                {% endif %}
+            </select>
+        </div>
+        <div class="history-field">
+            <label for="quantity">数量</label>
+            <input id="quantity" type="number" name="quantity" min="1" step="1" value="{{ transaction.quantity }}" required>
+        </div>
+        <div class="history-field">
+            <label for="history-user">ユーザー</label>
+            <input id="history-user" type="text" value="未設定" readonly>
+        </div>
+        <button class="history-submit" type="submit">更新</button>
+    </form>
+    <form class="history-delete-form" method="POST" action="{{ url_for('delete_transaction', transaction_id=transaction.id) }}" onsubmit="return confirm('この履歴を削除しますか？在庫も調整されます。');">
+        <button class="history-delete-button" type="submit">削除</button>
+    </form>
+    <a class="history-cancel" href="{{ url_for('history') }}">キャンセル</a>
+</div>
+{% endblock %}

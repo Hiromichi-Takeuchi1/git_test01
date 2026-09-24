@@ -1,35 +1,59 @@
+<!DOCTYPE html>
 {% extends "base.html" %}
 
-{% block title %}
-変更履歴
+{% block title %}入出庫履歴{% endblock %}
+
+{% block site_header %}
+<header class="top-header">
+    <a class="top-header__brand" href="{{ url_for('home') }}">TOP</a>
+    <button class="menu-button" type="button" aria-label="メニュー">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</header>
 {% endblock %}
 
 {% block content %}
+<div class="history-page">
+    <a class="history-page__back" href="{{ url_for('home') }}">＜ TOPへ戻る</a>
+    <section class="history-heading">
+        <div class="history-heading__icon" aria-hidden="true">▤</div>
+        <div>
+            <h1>入出庫履歴</h1>
+            <p>商品の入庫・出庫の記録を確認できます。</p>
+        </div>
+    </section>
 
-<h2>変更履歴</h2>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="history-flash" role="status">
+                {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
-<table>
-    <tr>
-        <th>日時</th>
-        <th>商品名</th>
-        <th>区分</th>
-        <th>数量</th>
-    </tr>
-
-    {% for transaction in transactions %}
-    <tr>
-        <td>{{ transaction.created_at }}</td>
-        <td>{{ transaction.product_name }}</td>
-        <td>{{ transaction.transaction_type }}</td>
-        <td>{{ transaction.quantity }}</td>
-    </tr>
-    {% endfor %}
-</table>
-
-<p>
-    <a href="{{ url_for('home') }}">
-        商品一覧へ戻る
-    </a>
-</p>
-
+    <section class="history-list" aria-label="入出庫履歴一覧">
+        {% for transaction in transactions %}
+        <article class="history-card">
+            <div class="history-card__topline">
+                <strong>H-{{ "%05d"|format(transaction.id) }}</strong>
+                <span class="history-type{% if transaction.transaction_type in ['in', '入荷'] %} history-type--in{% else %} history-type--out{% endif %}">
+                    {% if transaction.transaction_type in ['in', '入荷'] %}入庫{% else %}出庫{% endif %}
+                </span>
+            </div>
+            <dl class="history-card__details">
+                <div><dt>日時</dt><dd>{{ transaction.created_at }}</dd></div>
+                <div><dt>商品名</dt><dd>{{ transaction.current_product_name or transaction.product_name }}</dd></div>
+                <div><dt>入庫・出庫</dt><dd>{% if transaction.transaction_type in ['in', '入荷'] %}入庫{% else %}出庫{% endif %}</dd></div>
+                <div><dt>数量</dt><dd>{{ transaction.quantity }}</dd></div>
+                <div><dt>ユーザー</dt><dd>未設定</dd></div>
+            </dl>
+            <a class="history-edit-button" href="{{ url_for('edit_transaction', transaction_id=transaction.id) }}">編集</a>
+        </article>
+        {% else %}
+        <p class="history-empty">入出庫履歴はありません。</p>
+        {% endfor %}
+    </section>
+</div>
 {% endblock %}

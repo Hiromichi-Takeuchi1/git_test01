@@ -727,3 +727,246 @@ a {
         font-size: 12px;
     }
 }
+
+.history-page {
+    width: min(100%, 680px);
+    margin: 0 auto;
+    padding: 24px 16px 44px;
+}
+
+.history-page__back {
+    display: inline-block;
+    margin-bottom: 22px;
+    color: #2477b5;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.history-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.history-heading__icon {
+    display: grid;
+    flex: 0 0 52px;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    color: #ffffff;
+    background: linear-gradient(145deg, #65c9ee, #237dcc);
+    font-size: 28px;
+}
+
+.history-heading h1 {
+    margin: 0 0 5px;
+    color: #172d55;
+    font-size: 22px;
+}
+
+.history-heading p {
+    margin: 0;
+    color: #718096;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.history-flash {
+    margin: -5px 0 16px;
+    padding: 11px 14px;
+    border: 1px solid #cfeaf7;
+    border-radius: 10px;
+    color: #155e9c;
+    background: #f1fbfe;
+    font-size: 13px;
+}
+
+.history-flash p {
+    margin: 0;
+}
+
+.history-list {
+    display: grid;
+    gap: 13px;
+}
+
+.history-card {
+    padding: 16px 14px 14px;
+    border: 1px solid #e0edf4;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 7px 18px rgba(48, 91, 130, 0.09);
+}
+
+.history-card__topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e5eef4;
+    color: #172d55;
+    font-size: 15px;
+}
+
+.history-type {
+    min-width: 52px;
+    padding: 5px 9px;
+    border-radius: 8px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.history-type--in {
+    color: #19754d;
+    background: #e3f7ed;
+}
+
+.history-type--out {
+    color: #1b68a1;
+    background: #e5f3ff;
+}
+
+.history-card__details {
+    margin: 0;
+}
+
+.history-card__details div {
+    display: grid;
+    grid-template-columns: 86px minmax(0, 1fr);
+    gap: 8px;
+    padding: 9px 0;
+    border-bottom: 1px solid #edf3f6;
+    font-size: 13px;
+}
+
+.history-card__details dt {
+    color: #718096;
+}
+
+.history-card__details dd {
+    overflow: hidden;
+    margin: 0;
+    color: #263d61;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.history-edit-button,
+.history-submit,
+.history-delete-button,
+.history-cancel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 44px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.history-edit-button {
+    margin-top: 13px;
+    border: 1px solid #398fc9;
+    color: #2477b5;
+    background: #f1f9fc;
+}
+
+.history-empty {
+    margin: 0;
+    padding: 26px 14px;
+    border: 1px solid #e0edf4;
+    border-radius: 16px;
+    color: #8795a5;
+    background: #ffffff;
+    text-align: center;
+}
+
+.history-form {
+    padding: 20px 14px 16px;
+    border: 1px solid #e0edf4;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 7px 18px rgba(48, 91, 130, 0.09);
+}
+
+.history-field {
+    margin-bottom: 16px;
+}
+
+.history-field label {
+    display: block;
+    margin-bottom: 7px;
+    color: #263d61;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.history-field input,
+.history-field select {
+    width: 100%;
+    height: 48px;
+    padding: 0 13px;
+    border: 1px solid #c9dce8;
+    border-radius: 10px;
+    outline: none;
+    color: #38516f;
+    background: #ffffff;
+    font: inherit;
+    font-size: 14px;
+}
+
+.history-field input:focus,
+.history-field select:focus {
+    border-color: #398fc9;
+    box-shadow: 0 0 0 3px rgba(57, 143, 201, 0.13);
+}
+
+.history-field input[readonly] {
+    color: #718096;
+    background: #f4f8fa;
+}
+
+.history-submit {
+    margin-top: 5px;
+    border: 0;
+    color: #ffffff;
+    background: linear-gradient(135deg, #53b9e7, #2378c6);
+    box-shadow: 0 6px 14px rgba(35, 120, 198, 0.2);
+    cursor: pointer;
+}
+
+.history-delete-form {
+    margin: 12px 0 0;
+}
+
+.history-delete-button {
+    border: 1px solid #e58b91;
+    color: #b6444d;
+    background: #fff0f1;
+    cursor: pointer;
+}
+
+.history-cancel {
+    margin-top: 12px;
+    border: 1px solid #398fc9;
+    color: #2477b5;
+    background: #ffffff;
+}
+
+@media (min-width: 768px) {
+    .history-page {
+        padding: 42px 24px 56px;
+    }
+
+    .history-card,
+    .history-form {
+        padding: 22px 20px 18px;
+    }
+}

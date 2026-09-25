@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block title %}ユーザー登録{% endblock %}
+
+{% block site_header %}
+<header class="top-header">
+    <a class="top-header__brand" href="{{ url_for('home') }}">TOP</a>
+    {% if current_user.is_authenticated %}<a class="top-header__logout" href="{{ url_for('logout') }}">ログアウト</a>{% endif %}
+    <button class="menu-button" type="button" aria-label="メニュー">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="register-page">
+    <a class="register-page__back" href="{{ url_for('home') }}">＜ TOPへ戻る</a>
+    <section class="register-heading">
+        <div class="register-heading__icon" aria-hidden="true">＋</div>
+        <div>
+            <h1>ユーザー登録</h1>
+            <p>新しいユーザーを登録します。</p>
+        </div>
+    </section>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="register-flash" role="status">
+                {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form class="register-form" method="POST">
+        <div class="register-field">
+            <label for="username">ユーザー名</label>
+            <input id="username" type="text" name="username" autocomplete="username" required>
+        </div>
+        <div class="register-field">
+            <label for="password">パスワード</label>
+            <input id="password" type="password" name="password" autocomplete="new-password" required>
+        </div>
+        <div class="register-field">
+            <label for="password-confirmation">パスワード確認</label>
+            <input id="password-confirmation" type="password" name="password_confirmation" autocomplete="new-password" required>
+        </div>
+        <button class="register-submit" type="submit">登録</button>
+    </form>
+
+    <p class="register-login-link">
+        すでに登録済みの方は<a href="{{ url_for('login') }}">ログインはこちら</a>
+    </p>
+</div>
+{% endblock %}

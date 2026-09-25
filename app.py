@@ -1,9 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_login import LoginManager, UserMixin, login_user
 import sqlite3
 from datetime import datetime
-from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 UNIT_OPTIONS = ["袋", "本", "個", "箱", "缶", "パック", "kg", "g", "L", "ml", "その他"]
+
+
+class User(UserMixin):
+    def __init__(self, user_id, username, password_hash):
+        self.id = user_id
+        self.username = username
+        self.password_hash = password_hash
 
 def get_db_connection():
     conn = sqlite3.connect("inventory.db")
@@ -25,6 +33,27 @@ def get_db_connection():
 app = Flask(__name__)
 
 app.secret_key = "sample-secret-key"
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    conn = get_db_connection()
+    user_record = conn.execute(
+        "SELECT id, username, password_hash FROM users WHERE id = ?",
+        (user_id,)
+    ).fetchone()
+    conn.close()
+
+    if user_record is None:
+        return None
+    return User(
+        user_record["id"],
+        user_record["username"],
+        user_record["password_hash"]
+    )
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -66,10 +95,46 @@ def register():
         conn.close()
 
         flash("ユーザー登録が完了しました")
-        # ログイン画面実装後は、ここを /login へのリダイレクトに変更する。
-        return redirect(url_for("register"))
+        return redirect(url_for("login"))
 
     return render_template("register.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+
+        if not username:
+            flash("ユーザー名を入力してください")
+            return redirect(url_for("login"))
+        if not password:
+            flash("パスワードを入力してください")
+            return redirect(url_for("login"))
+
+        conn = get_db_connection()
+        user_record = conn.execute(
+            "SELECT id, username, password_hash FROM users WHERE username = ?",
+            (username,)
+        ).fetchone()
+        conn.close()
+
+        if user_record is None or not check_password_hash(user_record["password_hash"], password):
+            flash("ユーザー名またはパスワードが正しくありません")
+            return redirect(url_for("login"))
+
+        user = User(
+            user_record["id"],
+            user_record["username"],
+            user_record["password_hash"]
+        )
+        login_user(user)
+        flash("ログインしました")
+        return redirect(url_for("home"))
+
+    return render_template("login.html")
 
 @app.route("/")
 def home():

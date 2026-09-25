@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block title %}ログイン{% endblock %}
+
+{% block site_header %}
+<header class="top-header">
+    <a class="top-header__brand" href="{{ url_for('home') }}">TOP</a>
+    <button class="menu-button" type="button" aria-label="メニュー">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <a class="login-page__back" href="{{ url_for('home') }}">＜ TOPへ戻る</a>
+    <section class="login-heading">
+        <div class="login-heading__icon" aria-hidden="true">▣</div>
+        <div>
+            <h1>ログイン</h1>
+            <p>登録済みのユーザーでログインします。</p>
+        </div>
+    </section>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="login-flash" role="status">
+                {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form class="login-form" method="POST">
+        <div class="login-field">
+            <label for="login-username">ユーザー名</label>
+            <input id="login-username" type="text" name="username" autocomplete="username" required>
+        </div>
+        <div class="login-field">
+            <label for="login-password">パスワード</label>
+            <input id="login-password" type="password" name="password" autocomplete="current-password" required>
+        </div>
+        <button class="login-submit" type="submit">ログイン</button>
+    </form>
+
+    <p class="login-register-link">
+        ユーザー登録がお済みでない方は<a href="{{ url_for('register') }}">ユーザー登録はこちら</a>
+    </p>
+</div>
+{% endblock %}

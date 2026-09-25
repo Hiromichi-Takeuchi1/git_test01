@@ -46,7 +46,7 @@
                 <div><dt>日時</dt><dd>{{ transaction.created_at }}</dd></div>
                 <div><dt>商品名</dt><dd>{{ transaction.current_product_name or transaction.product_name }}</dd></div>
                 <div><dt>入庫・出庫</dt><dd>{% if transaction.transaction_type in ['in', '入荷'] %}入庫{% else %}出庫{% endif %}</dd></div>
-                <div><dt>数量</dt><dd>{{ transaction.quantity }}</dd></div>
+                <div><dt>数量</dt><dd>{{ transaction.quantity }}{% if transaction.current_product_unit and transaction.current_product_unit != "未設定" %}{{ transaction.current_product_unit }}{% endif %}</dd></div>
                 <div><dt>ユーザー</dt><dd>未設定</dd></div>
             </dl>
             <a class="history-edit-button" href="{{ url_for('edit_transaction', transaction_id=transaction.id) }}">編集</a>

@@ -204,6 +204,13 @@ a {
     white-space: nowrap;
 }
 
+.inventory-table td:nth-child(2),
+.inventory-table td:nth-child(3) {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 600;
+}
+
 .difference-badge {
     display: inline-block;
     min-width: 32px;
@@ -462,7 +469,7 @@ a {
     border-radius: 10px;
     color: #155e9c;
     background: #f1fbfe;
-    font-size: 13px;
+    font-size: 16px;
 }
 
 .product-flash p {
@@ -481,7 +488,7 @@ a {
     color: #ffffff;
     background: linear-gradient(135deg, #53b9e7, #2378c6);
     box-shadow: 0 6px 14px rgba(35, 120, 198, 0.2);
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     text-decoration: none;
 }
@@ -499,7 +506,7 @@ a {
 .product-table-card h2 {
     margin: 0 2px 14px;
     color: #172d55;
-    font-size: 17px;
+    font-size: 18px;
 }
 
 .product-table {
@@ -507,7 +514,7 @@ a {
     table-layout: fixed;
     border-collapse: collapse;
     color: #263d61;
-    font-size: 11px;
+    font-size: 16px;
 }
 
 .product-table th,
@@ -556,6 +563,13 @@ a {
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.product-table td:nth-child(3),
+.product-table td:nth-child(4) {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 600;
 }
 
 .product-actions {
@@ -695,11 +709,11 @@ a {
     }
 
     .inventory-table {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .inventory-table th {
-        font-size: 12px;
+        font-size: 16px;
     }
 
     .transaction-page {
@@ -720,11 +734,11 @@ a {
     }
 
     .product-table {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .product-table th {
-        font-size: 12px;
+        font-size: 16px;
     }
 }
 

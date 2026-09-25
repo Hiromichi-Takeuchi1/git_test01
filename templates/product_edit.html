@@ -44,7 +44,15 @@
         </div>
         <div class="product-field">
             <label for="product-unit">単位</label>
-            <input id="product-unit" type="text" name="unit" value="{{ product.unit if product.unit is defined else '' }}" placeholder="例）袋">
+            <select id="product-unit" name="unit">
+                <option value=""{% if not product.unit %} selected{% endif %}>未設定</option>
+                {% for unit in unit_options %}
+                <option value="{{ unit }}"{% if product.unit == unit %} selected{% endif %}>{{ unit }}</option>
+                {% endfor %}
+                {% if product.unit and product.unit not in unit_options %}
+                <option value="{{ product.unit }}" selected>{{ product.unit }}</option>
+                {% endif %}
+            </select>
         </div>
         <div class="product-field">
             <label for="proper-stock">適正在庫数</label>

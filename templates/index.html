@@ -71,11 +71,11 @@
                 {% for product in products %}
                 <tr>
                     <td>{{ product.name }}</td>
-                    <td>{{ product.stock }}</td>
-                    <td>{{ product.proper_stock }}</td>
+                    <td>{{ product.stock }}{% if product.unit and product.unit != "未設定" %}{{ product.unit }}{% endif %}</td>
+                    <td>{{ product.proper_stock }}{% if product.unit and product.unit != "未設定" %}{{ product.unit }}{% endif %}</td>
                     <td>
                         <span class="difference-badge{% if product.difference is gt(0) %} difference-badge--positive{% elif product.difference is lt(0) %} difference-badge--negative{% else %} difference-badge--zero{% endif %}">
-                            {% if product.difference is gt(0) %}+{% endif %}{{ product.difference }}
+                            {% if product.difference is gt(0) %}+{% endif %}{{ product.difference }}{% if product.unit and product.unit != "未設定" %}{{ product.unit }}{% endif %}
                         </span>
                     </td>
                 </tr>

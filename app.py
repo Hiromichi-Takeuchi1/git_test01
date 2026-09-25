@@ -42,6 +42,7 @@ def home():
             "name": product["name"],
             "stock": product["stock"],
             "proper_stock": product["proper_stock"],
+            "unit": product["unit"],
             "difference": product["stock"] - product["proper_stock"]
         }
         for product in products

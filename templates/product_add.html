@@ -45,7 +45,12 @@
         </div>
         <div class="product-field">
             <label for="product-unit">単位</label>
-            <input id="product-unit" type="text" name="unit" placeholder="例）袋">
+            <select id="product-unit" name="unit">
+                <option value="">未設定</option>
+                {% for unit in unit_options %}
+                <option value="{{ unit }}">{{ unit }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div class="product-field">
             <label for="proper-stock">適正在庫数</label>

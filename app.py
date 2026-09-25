@@ -2,9 +2,17 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import sqlite3
 from datetime import datetime
 
+UNIT_OPTIONS = ["袋", "本", "個", "箱", "缶", "パック", "kg", "g", "L", "ml", "その他"]
+
 def get_db_connection():
     conn = sqlite3.connect("inventory.db")
     conn.row_factory = sqlite3.Row
+    product_columns = {
+        row[1] for row in conn.execute("PRAGMA table_info(products)")
+    }
+    if product_columns and "unit" not in product_columns:
+        conn.execute("ALTER TABLE products ADD COLUMN unit TEXT")
+        conn.commit()
     columns = {
         row[1] for row in conn.execute("PRAGMA table_info(transactions)")
     }
@@ -301,6 +309,7 @@ def add_product_master():
 
     if request.method == "POST":
         name = request.form["name"]
+        unit = request.form.get("unit", "") or None
         proper_stock = request.form["proper_stock"]
 
         if name == "" or proper_stock == "":
@@ -312,10 +321,10 @@ def add_product_master():
         conn = get_db_connection()
         conn.execute(
             """
-            INSERT INTO products (name, stock, proper_stock)
-            VALUES (?, ?, ?)
+            INSERT INTO products (name, stock, proper_stock, unit)
+            VALUES (?, ?, ?, ?)
             """,
-            (name, 0, proper_stock)
+            (name, 0, proper_stock, unit)
         )
         conn.commit()
         conn.close()
@@ -331,7 +340,8 @@ def add_product_master():
 
     return render_template(
         "product_add.html",
-        products=products
+        products=products,
+        unit_options=UNIT_OPTIONS
     )
 
 @app.route("/products")
@@ -364,6 +374,7 @@ def edit_product(product_id):
 
     if request.method == "POST":
         name = request.form["name"]
+        unit = request.form.get("unit", "") or None
         proper_stock = request.form["proper_stock"]
 
         if name == "" or proper_stock == "":
@@ -373,8 +384,8 @@ def edit_product(product_id):
 
         proper_stock = int(proper_stock)
         conn.execute(
-            "UPDATE products SET name = ?, proper_stock = ? WHERE id = ?",
-            (name, proper_stock, product_id)
+            "UPDATE products SET name = ?, proper_stock = ?, unit = ? WHERE id = ?",
+            (name, proper_stock, unit, product_id)
         )
         conn.commit()
         conn.close()
@@ -385,7 +396,8 @@ def edit_product(product_id):
     conn.close()
     return render_template(
         "product_edit.html",
-        product=product
+        product=product,
+        unit_options=UNIT_OPTIONS
     )
 
 @app.route("/product/delete/<int:product_id>", methods=["POST"])

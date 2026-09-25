@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     stock INTEGER NOT NULL DEFAULT 0,
-    proper_stock INTEGER NOT NULL
+    proper_stock INTEGER NOT NULL,
+    unit TEXT
 )
 """)
 

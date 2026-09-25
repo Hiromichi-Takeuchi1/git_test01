@@ -690,6 +690,122 @@ a {
     cursor: pointer;
 }
 
+.register-page {
+    width: min(100%, 520px);
+    margin: 0 auto;
+    padding: 24px 16px 44px;
+}
+
+.register-page__back {
+    display: inline-block;
+    margin-bottom: 22px;
+    color: #2477b5;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.register-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.register-heading__icon {
+    display: grid;
+    flex: 0 0 52px;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    color: #ffffff;
+    background: linear-gradient(145deg, #65c9ee, #237dcc);
+    font-size: 28px;
+}
+
+.register-heading h1 {
+    margin: 0 0 5px;
+    color: #172d55;
+    font-size: 22px;
+}
+
+.register-heading p {
+    margin: 0;
+    color: #718096;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.register-flash {
+    margin: -5px 0 16px;
+    padding: 11px 14px;
+    border: 1px solid #cfeaf7;
+    border-radius: 10px;
+    color: #155e9c;
+    background: #f1fbfe;
+    font-size: 16px;
+}
+
+.register-flash p {
+    margin: 0;
+}
+
+.register-form {
+    padding: 22px 16px 18px;
+    border: 1px solid #e0edf4;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 8px 22px rgba(48, 91, 130, 0.1);
+}
+
+.register-field {
+    margin-bottom: 17px;
+}
+
+.register-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #263d61;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.register-field input {
+    width: 100%;
+    height: 50px;
+    padding: 0 14px;
+    border: 1px solid #c9dce8;
+    border-radius: 11px;
+    outline: none;
+    color: #38516f;
+    background: #ffffff;
+    font: inherit;
+    font-size: 14px;
+}
+
+.register-field input:focus {
+    border-color: #398fc9;
+    box-shadow: 0 0 0 3px rgba(57, 143, 201, 0.13);
+}
+
+.register-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 50px;
+    margin-top: 6px;
+    border: 0;
+    border-radius: 11px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #53b9e7, #2378c6);
+    box-shadow: 0 6px 14px rgba(35, 120, 198, 0.2);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
 @media (min-width: 768px) {
     .inventory-home {
         padding: 42px 24px 56px;

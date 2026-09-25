@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import sqlite3
 from datetime import datetime
+from werkzeug.security import generate_password_hash
 
 UNIT_OPTIONS = ["袋", "本", "個", "箱", "缶", "パック", "kg", "g", "L", "ml", "その他"]
 
@@ -24,6 +25,51 @@ def get_db_connection():
 app = Flask(__name__)
 
 app.secret_key = "sample-secret-key"
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+        password_confirmation = request.form.get("password_confirmation", "")
+
+        if not username:
+            flash("ユーザー名を入力してください")
+            return redirect(url_for("register"))
+        if not password:
+            flash("パスワードを入力してください")
+            return redirect(url_for("register"))
+        if not password_confirmation:
+            flash("パスワード確認を入力してください")
+            return redirect(url_for("register"))
+        if password != password_confirmation:
+            flash("パスワードが一致しません")
+            return redirect(url_for("register"))
+
+        conn = get_db_connection()
+        existing_user = conn.execute(
+            "SELECT id FROM users WHERE username = ?",
+            (username,)
+        ).fetchone()
+        if existing_user is not None:
+            conn.close()
+            flash("このユーザー名はすでに登録されています")
+            return redirect(url_for("register"))
+
+        password_hash = generate_password_hash(password)
+        conn.execute(
+            "INSERT INTO users (username, password_hash) VALUES (?, ?)",
+            (username, password_hash)
+        )
+        conn.commit()
+        conn.close()
+
+        flash("ユーザー登録が完了しました")
+        # ログイン画面実装後は、ここを /login へのリダイレクトに変更する。
+        return redirect(url_for("register"))
+
+    return render_template("register.html")
 
 @app.route("/")
 def home():

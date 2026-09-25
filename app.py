@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_login import LoginManager, UserMixin, login_user, logout_user
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 import sqlite3
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -36,6 +36,7 @@ app.secret_key = "sample-secret-key"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = "login"
 
 
 @login_manager.user_loader
@@ -144,6 +145,7 @@ def logout():
     return redirect(url_for("login"))
 
 @app.route("/")
+@login_required
 def home():
 
     conn = get_db_connection()
@@ -172,6 +174,7 @@ def home():
     )
 
 @app.route("/transaction", methods=["GET", "POST"])
+@login_required
 def transaction():
 
     if request.method == "POST":
@@ -244,6 +247,7 @@ def transaction():
     )
 
 @app.route("/history")
+@login_required
 def history():
 
     conn = get_db_connection()
@@ -290,6 +294,7 @@ def get_transaction_product(conn, transaction):
     ).fetchone()
 
 @app.route("/history/edit/<int:transaction_id>", methods=["GET", "POST"])
+@login_required
 def edit_transaction(transaction_id):
 
     conn = get_db_connection()
@@ -390,6 +395,7 @@ def edit_transaction(transaction_id):
     )
 
 @app.route("/history/delete/<int:transaction_id>", methods=["POST"])
+@login_required
 def delete_transaction(transaction_id):
 
     conn = get_db_connection()
@@ -425,6 +431,7 @@ def delete_transaction(transaction_id):
     return redirect(url_for("history"))
 
 @app.route("/product/add", methods=["GET", "POST"])
+@login_required
 def add_product_master():
 
     if request.method == "POST":
@@ -465,6 +472,7 @@ def add_product_master():
     )
 
 @app.route("/products")
+@login_required
 def product_list():
 
     conn = get_db_connection()
@@ -479,6 +487,7 @@ def product_list():
     )
 
 @app.route("/product/edit/<int:product_id>", methods=["GET", "POST"])
+@login_required
 def edit_product(product_id):
 
     conn = get_db_connection()
@@ -521,6 +530,7 @@ def edit_product(product_id):
     )
 
 @app.route("/product/delete/<int:product_id>", methods=["POST"])
+@login_required
 def delete_product(product_id):
 
     conn = get_db_connection()

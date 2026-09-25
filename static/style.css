@@ -520,7 +520,7 @@ a {
     table-layout: fixed;
     border-collapse: collapse;
     color: #263d61;
-    font-size: 16px;
+    font-size: 12px;
 }
 
 .product-table th,
@@ -539,29 +539,34 @@ a {
 
 .product-table th:nth-child(1),
 .product-table td:nth-child(1) {
-    width: 11%;
+    width: 9%;
 }
 
 .product-table th:nth-child(2),
 .product-table td:nth-child(2) {
-    width: 27%;
+    width: 24%;
     text-align: left;
 }
 
 .product-table th:nth-child(3),
 .product-table td:nth-child(3) {
-    width: 14%;
+    width: 12%;
 }
 
 .product-table th:nth-child(4),
 .product-table td:nth-child(4) {
-    width: 19%;
+    width: 13%;
 }
 
 .product-table th:nth-child(5),
 .product-table td:nth-child(5) {
     text-align: center;
     vertical-align: middle;
+}
+
+.product-table td:nth-child(5) {
+    padding-right: 0;
+    padding-left: 0;
 }
 
 .product-table td:nth-child(2) {
@@ -580,9 +585,9 @@ a {
 
 .product-actions {
     display: flex;
-    justify-content: center; /* 横方向の中央 */
-    align-items: center;     /* 縦方向の中央 */
-    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
     white-space: nowrap;
     flex-wrap: nowrap;
 }
@@ -591,27 +596,19 @@ a {
     margin: 0;
 }
 
-.product-actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: nowrap;
-}
-
 .product-edit-button,
 .product-delete-button {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: 60px;
-    height: 40px;
+    width: 52px;
+    height: 38px;
 
     padding: 0;
     border-radius: 8px;
 
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     text-decoration: none;
     cursor: pointer;
@@ -989,6 +986,26 @@ a {
 
     .product-table {
         font-size: 16px;
+    }
+
+    .product-table th:nth-child(1),
+    .product-table td:nth-child(1) {
+        width: 11%;
+    }
+
+    .product-table th:nth-child(2),
+    .product-table td:nth-child(2) {
+        width: 27%;
+    }
+
+    .product-table th:nth-child(3),
+    .product-table td:nth-child(3) {
+        width: 14%;
+    }
+
+    .product-table th:nth-child(4),
+    .product-table td:nth-child(4) {
+        width: 19%;
     }
 
     .product-table th {

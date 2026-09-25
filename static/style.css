@@ -204,6 +204,13 @@ a {
     white-space: nowrap;
 }
 
+.inventory-table td:nth-child(2),
+.inventory-table td:nth-child(3) {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 600;
+}
+
 .difference-badge {
     display: inline-block;
     min-width: 32px;

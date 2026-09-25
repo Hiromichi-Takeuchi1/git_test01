@@ -131,7 +131,8 @@ def history():
     conn = get_db_connection()
     transactions = conn.execute(
         """
-        SELECT transactions.*, products.name AS current_product_name
+        SELECT transactions.*, products.name AS current_product_name,
+             products.unit AS current_product_unit
         FROM transactions
         LEFT JOIN products ON products.id = transactions.product_id
         ORDER BY transactions.id DESC

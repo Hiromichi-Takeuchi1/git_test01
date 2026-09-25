@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
+from flask_login import LoginManager, UserMixin, current_user, login_required, login_user, logout_user
 import sqlite3
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -27,6 +27,9 @@ def get_db_connection():
     }
     if columns and "product_id" not in columns:
         conn.execute("ALTER TABLE transactions ADD COLUMN product_id INTEGER")
+        conn.commit()
+    if columns and "user_id" not in columns:
+        conn.execute("ALTER TABLE transactions ADD COLUMN user_id INTEGER")
         conn.commit()
     return conn
 
@@ -203,10 +206,10 @@ def transaction():
                 )
                 conn.execute(
                     """
-                    INSERT INTO transactions (product_id, product_name, transaction_type, quantity, created_at)
-                    VALUES (?, ?, ?, ?, ?)
+                    INSERT INTO transactions (product_id, product_name, transaction_type, quantity, created_at, user_id)
+                    VALUES (?, ?, ?, ?, ?, ?)
                     """,
-                    (product_id, product["name"], "入荷", quantity, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                    (product_id, product["name"], "入荷", quantity, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), current_user.id)
                 )
                 conn.commit()
                 flash("入荷を登録しました")
@@ -223,10 +226,10 @@ def transaction():
                 )
                 conn.execute(
                     """
-                    INSERT INTO transactions (product_id, product_name, transaction_type, quantity, created_at)
-                    VALUES (?, ?, ?, ?, ?)
+                    INSERT INTO transactions (product_id, product_name, transaction_type, quantity, created_at, user_id)
+                    VALUES (?, ?, ?, ?, ?, ?)
                     """,
-                    (product_id, product["name"], "出庫", quantity, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                    (product_id, product["name"], "出庫", quantity, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), current_user.id)
                 )
                 conn.commit()
                 flash("出庫を登録しました")
@@ -253,10 +256,12 @@ def history():
     conn = get_db_connection()
     transactions = conn.execute(
         """
-        SELECT transactions.*, products.name AS current_product_name,
-             products.unit AS current_product_unit
+           SELECT transactions.*, products.name AS current_product_name,
+               products.unit AS current_product_unit,
+               users.username AS transaction_username
         FROM transactions
         LEFT JOIN products ON products.id = transactions.product_id
+           LEFT JOIN users ON users.id = transactions.user_id
         ORDER BY transactions.id DESC
         """
     ).fetchall()

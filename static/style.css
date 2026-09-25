@@ -29,29 +29,27 @@ a {
     text-decoration: none;
 }
 
-.top-header__logout {
-    color: #2477b5;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.menu-button {
+.top-header__logout-icon {
     display: grid;
-    gap: 4px;
+    place-items: center;
     width: 38px;
-    padding: 8px 7px;
-    border: 0;
     border-radius: 8px;
-    background: transparent;
+    color: #17345d;
+    text-decoration: none;
 }
 
-.menu-button span {
-    display: block;
-    height: 2px;
-    border-radius: 2px;
-    background: #17345d;
+.top-header__logout-icon:hover {
+    background: rgba(23, 52, 93, 0.08);
+}
+
+.top-header__logout-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
 }
 
 .inventory-home {

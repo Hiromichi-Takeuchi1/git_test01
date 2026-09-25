@@ -6,12 +6,13 @@
 {% block site_header %}
 <header class="top-header">
     <a class="top-header__brand" href="{{ url_for('home') }}">TOP</a>
-    {% if current_user.is_authenticated %}<a class="top-header__logout" href="{{ url_for('logout') }}">ログアウト</a>{% endif %}
-    <button class="menu-button" type="button" aria-label="メニュー">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
+    {% if current_user.is_authenticated %}
+    <a class="top-header__logout-icon" href="{{ url_for('logout') }}" aria-label="ログアウト" title="ログアウト">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M10 4H5v16h5M14 8l4 4-4 4M18 12H9" />
+        </svg>
+    </a>
+    {% endif %}
 </header>
 {% endblock %}
 

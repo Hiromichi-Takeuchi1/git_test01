@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_login import LoginManager, UserMixin, login_user
+from flask_login import LoginManager, UserMixin, login_user, logout_user
 import sqlite3
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -135,6 +135,13 @@ def login():
         return redirect(url_for("home"))
 
     return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    flash("ログアウトしました")
+    return redirect(url_for("login"))
 
 @app.route("/")
 def home():

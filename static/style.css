@@ -17,14 +17,14 @@ a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 58px;
+    min-height: 62px;
     padding: 0 20px;
     background: #f0fbff;
 }
 
 .top-header__brand {
     color: #1475c9;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
     text-decoration: none;
 }
@@ -32,7 +32,8 @@ a {
 .top-header__logout-icon {
     display: grid;
     place-items: center;
-    width: 38px;
+    width: 42px;
+    height: 42px;
     border-radius: 8px;
     color: #17345d;
     text-decoration: none;
@@ -43,8 +44,8 @@ a {
 }
 
 .top-header__logout-icon svg {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     fill: none;
     stroke: currentColor;
     stroke-linecap: round;
@@ -53,9 +54,10 @@ a {
 }
 
 .inventory-home {
-    width: min(100%, 720px);
+    width: 100%;
+    max-width: 720px;
     margin: 0 auto;
-    padding: 28px 16px 40px;
+    padding: 24px 18px 40px;
 }
 
 .intro {
@@ -67,26 +69,26 @@ a {
 
 .intro__icon {
     display: grid;
-    flex: 0 0 52px;
+    flex: 0 0 60px;
     place-items: center;
-    width: 52px;
-    height: 52px;
+    width: 60px;
+    height: 60px;
     border-radius: 16px;
     color: #ffffff;
     background: linear-gradient(145deg, #65c9ee, #237dcc);
-    font-size: 28px;
+    font-size: 32px;
 }
 
 .intro h1 {
     margin: 0 0 5px;
     color: #172d55;
-    font-size: 22px;
+    font-size: 26px;
 }
 
 .intro p {
     margin: 0;
     color: #718096;
-    font-size: 13px;
+    font-size: 15px;
 }
 
 .flash-messages {
@@ -102,21 +104,21 @@ a {
 .quick-actions {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 9px;
+    gap: 8px;
     margin-bottom: 22px;
 }
 
 .quick-action {
     display: flex;
-    min-height: 100px;
+    min-height: 120px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 12px 5px;
-    border-radius: 16px;
+    gap: 9px;
+    padding: 12px 3px;
+    border-radius: 18px;
     color: #ffffff;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 700;
     text-align: center;
     text-decoration: none;
@@ -124,7 +126,7 @@ a {
 }
 
 .quick-action__icon {
-    font-size: 27px;
+    font-size: 34px;
     line-height: 1;
 }
 
@@ -141,7 +143,7 @@ a {
 }
 
 .inventory-card {
-    padding: 20px 14px 15px;
+    padding: 22px 12px 17px;
     border: 1px solid #e2f0f7;
     border-radius: 18px;
     background: #ffffff;
@@ -161,29 +163,29 @@ a {
     gap: 8px;
     margin: 0;
     color: #172d55;
-    font-size: 17px;
+    font-size: 20px;
 }
 
 .inventory-card h2 span {
     color: #2583cc;
-    font-size: 21px;
+    font-size: 23px;
 }
 
 .inventory-count {
     color: #75859a;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .inventory-table {
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
-    font-size: 12px;
+    font-size: 15px;
 }
 
 .inventory-table th,
 .inventory-table td {
-    padding: 12px 4px;
+    padding: 16px 4px;
     border-bottom: 1px solid #e5eef4;
     text-align: center;
     vertical-align: middle;
@@ -192,7 +194,7 @@ a {
 .inventory-table th {
     color: #58708b;
     background: #f1f9fc;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
 }
 
@@ -205,7 +207,8 @@ a {
 .inventory-table td:first-child {
     overflow: hidden;
     color: #263d61;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 700;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -219,9 +222,10 @@ a {
 
 .difference-badge {
     display: inline-block;
-    min-width: 32px;
-    padding: 4px 5px;
-    border-radius: 7px;
+    min-width: 52px;
+    padding: 7px 5px;
+    border-radius: 9px;
+    font-size: 15px;
     font-weight: 700;
 }
 
@@ -250,25 +254,25 @@ a {
     align-items: center;
     gap: 8px;
     margin: 15px 0 0;
-    padding: 11px 10px;
+    padding: 14px 12px;
     border-radius: 10px;
     color: #61758d;
     background: #f1fbfe;
-    font-size: 11px;
+    font-size: 13px;
     line-height: 1.5;
 }
 
 .inventory-note span {
     display: grid;
-    flex: 0 0 17px;
+    flex: 0 0 20px;
     place-items: center;
-    width: 17px;
-    height: 17px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     color: #ffffff;
     background: #348cca;
     font-family: Georgia, serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
 }
 
@@ -942,8 +946,41 @@ a {
 }
 
 @media (min-width: 768px) {
+    .top-header {
+        min-height: 58px;
+    }
+
+    .top-header__brand {
+        font-size: 18px;
+    }
+
+    .top-header__logout-icon {
+        width: 38px;
+        height: auto;
+    }
+
+    .top-header__logout-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+
     .inventory-home {
         padding: 42px 24px 56px;
+    }
+
+    .intro__icon {
+        flex-basis: 52px;
+        width: 52px;
+        height: 52px;
+        font-size: 28px;
+    }
+
+    .intro h1 {
+        font-size: 22px;
+    }
+
+    .intro p {
+        font-size: 13px;
     }
 
     .quick-actions {
@@ -955,16 +992,61 @@ a {
         font-size: 14px;
     }
 
+    .quick-action__icon {
+        font-size: 27px;
+    }
+
     .inventory-card {
         padding: 24px 22px 18px;
+    }
+
+    .inventory-card h2 {
+        font-size: 17px;
+    }
+
+    .inventory-card h2 span {
+        font-size: 21px;
+    }
+
+    .inventory-count {
+        font-size: 12px;
     }
 
     .inventory-table {
         font-size: 16px;
     }
 
+    .inventory-table th,
+    .inventory-table td {
+        padding: 12px 4px;
+    }
+
     .inventory-table th {
         font-size: 16px;
+    }
+
+    .inventory-table td:first-child {
+        font-size: inherit;
+        font-weight: 600;
+    }
+
+    .difference-badge {
+        min-width: 32px;
+        padding: 4px 5px;
+        border-radius: 7px;
+        font-size: inherit;
+    }
+
+    .inventory-note {
+        padding: 11px 10px;
+        font-size: 11px;
+    }
+
+    .inventory-note span {
+        flex-basis: 17px;
+        width: 17px;
+        height: 17px;
+        font-size: 12px;
     }
 
     .transaction-page {
